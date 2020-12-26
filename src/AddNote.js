@@ -38,25 +38,27 @@ class AddNote extends React.Component {
     }
 
     handleAddNote = (e) => {
-        //      e.preventDefault()
+        e.preventDefault()
         
         const note = {
-            name: this.state.name.value, 
+            note_name: this.state.name.value, 
             content: this.state.content.value,
             modified: new Date(document.lastModified),
-            folderId: e.target['folderId'].value,
-            id: Math.ceil(Math.random() * 10000) + this.state.name.value
+            //folderid: 2
+            folderid: e.target['folderid'].value,
+            //id: Math.ceil(Math.random() * 10000) + this.state.name.value
         }
        
         const options = {
             method: 'POST',
             body: JSON.stringify(note),
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'Authorization': `Bearer 123456789`
             }
         }
 
-        fetch(`http://localhost:9090/notes`, options)
+        fetch(`http://localhost:9000/add-note`, options)
             .then(res => {
                 if (!res.ok)
                 return res.json().then(e => Promise.reject(e))
@@ -65,6 +67,7 @@ class AddNote extends React.Component {
             .then( data => {
                 this.context.addNote(data)
             })
+            .then(this.props.history.push(`/`))
             .catch(error => {
                 console.error({ error })
             })
@@ -95,7 +98,7 @@ class AddNote extends React.Component {
         const newFolder = this.context.folders.map( (folder, idx) => {
             return (
                 <option value={folder.id} key={idx}>
-                    {folder.name}
+                    {folder.title}
                 </option>
             )
         })
@@ -105,12 +108,12 @@ class AddNote extends React.Component {
                 <h2>Note Form</h2>
                 <br />
                 <form onSubmit={(e)=> this.handleAddNote(e)}>
-                    <label htmlFor='folderId'>
+                    <label htmlFor='folderid'>
                         Choose an existing folder:
                     </label>
                     <select 
-                        name='folderId' 
-                        id='folderId'
+                        name='folderid' 
+                        id='folderid'
                     >
                         {newFolder}
                     </select>

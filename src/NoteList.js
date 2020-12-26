@@ -17,14 +17,13 @@ class NoteList extends React.Component {
         const getNotesForFolder = (notes=[], folderId) => (
             (!folderId)
               ? notes
-              : notes.filter(note => note.folderId === folderId)
+              : notes.filter(note => note.folderid == folderId)
         )
         
         const folderId = this.props.match.params.folderId
         const notes = this.context.notes
         const notesForFolder = getNotesForFolder(notes, folderId)
-        
-        console.log(this.context.notes)
+
         return (
             <div className='notelist'>
                 <h2>

@@ -14,10 +14,11 @@ class Note extends React.Component {
         //e.preventDefault()
         const noteId = this.props.id
 
-        fetch(`http://localhost:9090/notes/${noteId}`, {
+        fetch(`http://localhost:9000/notes/${noteId}`, {
             method: 'DELETE',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'Authorization': `Bearer 123456789`
             },
             })
             .then(res => {
@@ -25,17 +26,15 @@ class Note extends React.Component {
                 return res.json().then(e => Promise.reject(e))
                 return res.json()
             })
-            .then(() => {
-                this.props.onDeleteNote(noteId)
-                this.context.deleteNote(noteId)
-            })
+            .then(this.props.onDeleteNote(noteId))
+            .then(this.context.deleteNote(noteId))
+            
             .catch(error => {
                 console.error({ error })
             })
     }
 
     render() {
-        console.log('Note',this.context.notes)
         return (
             <div className='note'>
                 <h3>
@@ -54,10 +53,10 @@ class Note extends React.Component {
     }
 }
 
-// Note.propTypes = {
-//     name: PropTypes.string.isRequired,
-//     id: PropTypes.string.isRequired,
-//     onDeleteNote: PropTypes.func.isRequired
-// }
+Note.propTypes = {
+    name: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    onDeleteNote: PropTypes.func.isRequired
+}
 
 export default Note

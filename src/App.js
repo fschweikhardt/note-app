@@ -15,7 +15,7 @@ import NotefulError from './NotefulError'
 class App extends React.Component {
   state = {
     folders: [],
-    notes: []
+    notes: [],
   } 
 
   setFolders = folders => {
@@ -28,6 +28,10 @@ class App extends React.Component {
     this.setState({
       notes
     })
+  }
+
+  getData = data => {
+    console.log(data)
   }
 
   componentDidMount() {
@@ -45,6 +49,27 @@ class App extends React.Component {
         return res.json()
       })
       .then(this.setNotes)
+      //.then(this.getData)
+      .catch(error => {
+        console.error(error)
+        this.setState({ error })
+      })
+
+      fetch('http://localhost:9000/api/folders', {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer 123456789`
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(error => Promise.reject(error))
+        }
+        return res.json()
+      })
+      .then(this.setFolders)
+      //.then(this.getData)
       .catch(error => {
         console.error(error)
         this.setState({ error })
@@ -65,9 +90,13 @@ class App extends React.Component {
     })
   }
 
-  // handleAddNote = (note) => {
-    
-  // }
+  handleAddNote = note => {
+    console.log('added note on App.js', note)
+    this.setState({
+      notes: [...this.state.notes, note]
+    })
+  }
+  
   
   render() {
     const value = {
@@ -75,11 +104,11 @@ class App extends React.Component {
       notes: this.state.notes,
       deleteNote: this.handleDeleteNote, 
       addFolder: this.handleAddFolder,
-      //addNote: this.handleAddNote
+      addNote: this.handleAddNote
       }
-    
-    //console.log(this.state.folders)
 
+      console.log(this.state.notes)
+      console.log(this.state.folders)
     return (
       <NotefulContext.Provider value={value}>
         <div className='App'>

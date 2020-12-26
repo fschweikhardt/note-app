@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import NotefulContext from './NotefulContext'
 
 class FolderNav extends React.Component {
@@ -7,7 +7,7 @@ class FolderNav extends React.Component {
 
     render() {
         //const folders = this.context.folders
-        console.log(this.context.folders)
+        //console.log(this.context.folders)
     return (
         <div className='sidebar'>
             <h2>Folders</h2>
@@ -15,9 +15,9 @@ class FolderNav extends React.Component {
                 {this.context.folders.map( folder => {
                     return (
                         <li key={folder.id} >
-                            <NavLink to={folder.id}>
+                            <Link to={`/folder/${folder.id}`}>
                             {folder.title}
-                            </NavLink>
+                            </Link>
                         </li>
             )
         })}

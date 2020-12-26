@@ -19,9 +19,10 @@ class NotePage extends React.Component {
     render() {
 
         const noteId = this.props.match.params.noteId
-        const findNote = this.context.notes.find( note => noteId === note.id)
+        const findNote = this.context.notes.find( notes => notes.id == noteId)
 
-        console.log("NotePage", this.context.notes[0].id, findNote, noteId)
+        //console.log("NotePage", noteId, findNote )
+
         return (
             <div className='notepage'>
                 <h2>
@@ -35,7 +36,6 @@ class NotePage extends React.Component {
                     onDeleteNote={this.handleDeleteNote}
                 />
                 <p>{findNote.content}</p>
-                {/* <Note /> */}
             </div>
         )
     }
