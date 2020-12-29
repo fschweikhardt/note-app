@@ -35,7 +35,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:9000/', {
+    fetch('http://localhost:9000/api/notes', {
       method: 'GET',
       headers: {
         'content-type': 'application/json',

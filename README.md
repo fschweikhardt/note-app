@@ -1,4 +1,4 @@
-Frank's Noteful App that fulfills the requirements for "Organize your React code" section 17.
+Front end for the note app. Connect to the back end at "note-server".
 
 # Getting Started with Create React App
 
