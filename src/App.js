@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
+import config from './config'
 import './App.css';
 import Header from './Header'
 import FolderNav from './FolderNav'
@@ -35,11 +36,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:9000/api/notes', {
+    fetch(config.API_ENDPOINT_NOTES, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer 123456789`
+        'Authorization': `Bearer ${config.API_TOKEN}`
       }
     })
       .then(res => {
@@ -55,11 +56,11 @@ class App extends React.Component {
         this.setState({ error })
       })
 
-      fetch('http://localhost:9000/api/folders', {
+      fetch(config.API_ENDPOINT_FOLDERS, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer 123456789`
+        'Authorization': `Bearer ${config.API_TOKEN}`
       }
     })
       .then(res => {
