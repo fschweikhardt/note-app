@@ -2,6 +2,7 @@ import React from 'react'
 import NotefulContext from './NotefulContext'
 import PropTypes from 'prop-types'
 import ValidationError from './ValidationError'
+import config from './config'
 
 class AddNote extends React.Component {
     static contextType = NotefulContext;
@@ -44,9 +45,7 @@ class AddNote extends React.Component {
             note_name: this.state.name.value, 
             content: this.state.content.value,
             modified: new Date(document.lastModified),
-            //folderid: 2
             folderid: e.target['folderid'].value,
-            //id: Math.ceil(Math.random() * 10000) + this.state.name.value
         }
        
         const options = {
@@ -54,11 +53,11 @@ class AddNote extends React.Component {
             body: JSON.stringify(note),
             headers: {
                 'content-type': 'application/json',
-                'Authorization': `Bearer 123456789`
+                'Authorization': `Bearer ${config.API_TOKEN}`
             }
         }
 
-        fetch(`http://localhost:9000/add-note`, options)
+        fetch(config.API_ENDPOINT_ADDNOTE, options)
             .then(res => {
                 if (!res.ok)
                 return res.json().then(e => Promise.reject(e))

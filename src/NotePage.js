@@ -21,7 +21,7 @@ class NotePage extends React.Component {
         const noteId = this.props.match.params.noteId
         const findNote = this.context.notes.find( notes => notes.id == noteId)
 
-        //console.log("NotePage", noteId, findNote )
+        console.log("NotePage", noteId, findNote )
 
         return (
             <div className='notepage'>

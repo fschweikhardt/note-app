@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import NotefulContext from './NotefulContext'
+import config from './config'
 
 class Note extends React.Component { 
         static defaultProps = {
@@ -14,11 +15,11 @@ class Note extends React.Component {
         //e.preventDefault()
         const noteId = this.props.id
 
-        fetch(`http://localhost:9000/notes/${noteId}`, {
+        fetch(`${config.API_ENDPOINT_NOTES}/${noteId}`, {
             method: 'DELETE',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': `Bearer 123456789`
+                'Authorization': `Bearer ${config.API_TOKEN}`
             },
             })
             .then(res => {

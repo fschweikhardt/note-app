@@ -2,24 +2,25 @@ import React from 'react'
 import NotefulContext from './NotefulContext'
 import ValidationError from './ValidationError'
 import PropTypes from 'prop-types'
+import config from './config'
 
 class AddFolder extends React.Component {
     static contextType = NotefulContext;
     constructor(props) {
         super(props)
         this.state = {
-            name: {
+            title: {
                 value: 'blank', 
                 touched: false
             } 
         }
     }
 
-    updateName = (name) => {
-        console.log('update name')
+    updateName = (title) => {
+        console.log('update title')
         this.setState({
-            name: {
-                value: name, 
+            title: {
+                value: title, 
                 touched: true
             }
         })
@@ -27,22 +28,23 @@ class AddFolder extends React.Component {
 
     handleAddFolder = (e) => {
         console.log('addFolder on component')
-        //e.preventDefault()
+        e.preventDefault()
         const folder = {
-            id: Math.ceil(Math.random() * 100000).toString(),
-            //name: e.target['name'].value
-            name: this.state.name.value
+            //id: Math.ceil(Math.random() * 100000).toString(),
+            //title: e.target['title'].value
+            title: this.state.title.value
         }
        
         const options = {
             method: 'POST',
             body: JSON.stringify(folder),
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'Authorization' : `Bearer ${config.API_TOKEN}`
             }
         }
 
-        fetch(`http://localhost:9090/folders`, options)
+        fetch(config.API_ENDPOINT_ADDFOLDER, options)
             .then(res => {
                 if (!res.ok)
                 return res.json().then(e => Promise.reject(e))
@@ -51,40 +53,40 @@ class AddFolder extends React.Component {
             .then( data => {
                 this.context.addFolder(data)
                 console.log(data)
-                
+                this.props.history.push('/')
             })
             .catch(error => {
                 console.error({ error })
             })
     }
 
-    validateName() {
-        let name = this.state.name.value.trim()
-        if ( name.length === 0 ) {
-            return 'Enter a folder name'
-        } else if ( name.length < 4 ) {
-            return 'Enter a longer name'
+    validateTitle() {
+        let title = this.state.title.value.trim()
+        if ( title.length === 0 ) {
+            return 'Enter a folder title'
+        } else if ( title.length < 4 ) {
+            return 'Enter a longer title'
         }
     }
 
     render() {
-        const nameError = this.validateName()
+        const nameError = this.validateTitle()
         return ( 
             <div>
                 <h2>Folder Form</h2>
                 <br />
                 <form onSubmit={(e)=> this.handleAddFolder(e)}>
-                    <label htmlFor='name'>
+                    <label htmlFor='title'>
                         Name
                     </label>
                     <input 
                         type='text' 
-                        name='name' 
-                        id='name'
+                        name='title' 
+                        id='title'
                         onChange={(e)=> this.updateName(e.target.value)}
                         required
                     />
-                     {this.state.name.touched && <ValidationError message={nameError} />}
+                     {this.state.title.touched && <ValidationError message={nameError} />}
                     <br />
                     <button
                         type='submit'
@@ -98,7 +100,7 @@ class AddFolder extends React.Component {
 }
 
 AddFolder.propTypes = {
-    name: PropTypes.string
+    title: PropTypes.string
 }
 
 export default AddFolder

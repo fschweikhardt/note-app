@@ -31,8 +31,25 @@ class App extends React.Component {
     })
   }
 
-  getData = data => {
-    console.log(data)
+  handleDeleteNote = (noteId) => {
+    const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
+    this.setState({
+      notes: filteredNotes
+    })
+  }
+
+  handleAddFolder = (folder) => {
+    console.log('add folder on App.js', folder)
+    this.setState({
+      folders: [...this.state.folders, folder]
+    })
+  }
+
+  handleAddNote = note => {
+    console.log('added note on App.js', note)
+    this.setState({
+      notes: [...this.state.notes, note]
+    })
   }
 
   componentDidMount() {
@@ -50,7 +67,6 @@ class App extends React.Component {
         return res.json()
       })
       .then(this.setNotes)
-      //.then(this.getData)
       .catch(error => {
         console.error(error)
         this.setState({ error })
@@ -70,32 +86,10 @@ class App extends React.Component {
         return res.json()
       })
       .then(this.setFolders)
-      //.then(this.getData)
       .catch(error => {
         console.error(error)
         this.setState({ error })
       })
-  }
-
-  handleDeleteNote = (noteId) => {
-    const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
-    this.setState({
-      notes: filteredNotes
-    })
-  }
-
-  handleAddFolder = (folder) => {
-    console.log('add folder on App', folder)
-    this.setState({
-      folders: [...this.state.folders, folder]
-    })
-  }
-
-  handleAddNote = note => {
-    console.log('added note on App.js', note)
-    this.setState({
-      notes: [...this.state.notes, note]
-    })
   }
   
   
@@ -108,8 +102,9 @@ class App extends React.Component {
       addNote: this.handleAddNote
       }
 
-      console.log(this.state.notes)
-      console.log(this.state.folders)
+    console.log('state: folders', this.state.folders)
+    console.log('state: notes', this.state.notes)
+
     return (
       <NotefulContext.Provider value={value}>
         <div className='App'>
