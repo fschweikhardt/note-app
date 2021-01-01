@@ -59,14 +59,16 @@ class AddNote extends React.Component {
 
         fetch(`${config.API_ENDPOINT}/add-note`, options)
             .then(res => {
-                if (!res.ok)
-                return res.json().then(e => Promise.reject(e))
+                if (!res.ok) {
+                    return res.json().then(e => Promise.reject(e))
+                }
                 return res.json()
             })
             .then( data => {
+                console.log('add note .then', data)
                 this.context.addNote(data)
+                this.props.history.push('/')
             })
-            .then(this.props.history.push(`/`))
             .catch(error => {
                 console.error({ error })
             })
@@ -93,6 +95,7 @@ class AddNote extends React.Component {
     render() {
         const nameError = this.validateName()
         const contentError = this.validateContent()
+        console.log(this.context.addNote)
 
         const newFolder = this.context.folders.map( (folder, idx) => {
             return (

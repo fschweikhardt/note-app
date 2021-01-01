@@ -31,19 +31,57 @@ class App extends React.Component {
     })
   }
 
-  handleDeleteNote = (noteId) => {
+  componentDidMount() {
+    const fetchFolders = 
+    fetch(`${config.API_ENDPOINT}/folders`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${config.API_TOKEN}`
+      }
+    })
+    const fetchNotes = 
+    fetch(`${config.API_ENDPOINT}/notes`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${config.API_TOKEN}`
+      }
+    })
+
+    Promise
+      .all([ fetchFolders, fetchNotes ])
+      .then( ([ foldersRes, notesRes ]) => {
+        if (!foldersRes.ok) {
+          return foldersRes.json().then(error => Promise.reject(error))
+        }
+        if (!notesRes.ok) {
+          return notesRes.json().then(error => Promise.reject(error))
+        }  
+        return Promise.all([foldersRes.json(), notesRes.json()]);
+      })
+      .then(([folders, notes]) => {
+        this.setState({folders, notes});
+    })
+      .catch(error => {
+        console.error(error)
+        this.setState({ error })
+      }) 
+}
+
+  handleDeleteNote = noteId => {
+    console.log('delete note on app.js')
     const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
     this.setState({
       notes: filteredNotes
     })
   }
 
-  handleAddFolder = (folder) => {
+  handleAddFolder = folder => {
     console.log('add folder on App.js', folder)
     this.setState({
       folders: [...this.state.folders, folder]
     })
-    this.props.history.push('/')
   }
 
   handleAddNote = note => {
@@ -53,53 +91,6 @@ class App extends React.Component {
     })
   }
 
-  componentDidMount() {
-    const fetchFolders = 
-      fetch(`${config.API_ENDPOINT}/folders`, {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': `Bearer ${config.API_TOKEN}`
-        }
-      })
-      .then(res => {
-        if (!res.ok) {
-          return res.json().then(error => Promise.reject(error))
-        }
-        return res.json()
-      })
-      .then(this.setFolders)
-      .catch(error => {
-        console.error(error)
-        this.setState({ error })
-      })
-    
-      const fetchNotes = 
-      fetch(`${config.API_ENDPOINT}/notes`, {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': `Bearer ${config.API_TOKEN}`
-        }
-      })
-      .then(res => {
-        if (!res.ok) {
-          return res.json().then(error => Promise.reject(error))
-        }
-        return res.json()
-      })
-      .then(this.setNotes)
-      .catch(error => {
-        console.error(error)
-        this.setState({ error })
-      }) 
-
-    Promise.all([fetchFolders, fetchNotes])
-      .catch(error => console.log(error.message))
-
-  }
-  
-  
   render() {
     const value = {
       folders: this.state.folders,
