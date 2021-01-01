@@ -6,18 +6,17 @@ import config from './config'
 
 class AddFolder extends React.Component {
     static contextType = NotefulContext;
-    constructor(props) {
-        super(props)
-        this.state = {
+    // constructor(props) {
+    //     super(props)
+        state = {
             title: {
                 value: 'blank', 
                 touched: false
             } 
         }
-    }
+    //}
 
     updateName = (title) => {
-        console.log('update title')
         this.setState({
             title: {
                 value: title, 
@@ -27,7 +26,6 @@ class AddFolder extends React.Component {
     }
 
     handleAddFolder = (e) => {
-        console.log('addFolder on component')
         e.preventDefault()
         const folder = {
             //id: Math.ceil(Math.random() * 100000).toString(),
@@ -44,15 +42,15 @@ class AddFolder extends React.Component {
             }
         }
 
-        fetch(config.API_ENDPOINT_ADDFOLDER, options)
+        fetch(`${config.API_ENDPOINT}/add-folder`, options)
             .then(res => {
                 if (!res.ok)
                 return res.json().then(e => Promise.reject(e))
                 return res.json()
             })
             .then( data => {
-                this.context.addFolder(data)
                 console.log(data)
+                this.context.addFolder(data)
                 this.props.history.push('/')
             })
             .catch(error => {
@@ -68,9 +66,10 @@ class AddFolder extends React.Component {
             return 'Enter a longer title'
         }
     }
-
+    
     render() {
         const nameError = this.validateTitle()
+
         return ( 
             <div>
                 <h2>Folder Form</h2>

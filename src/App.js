@@ -43,6 +43,7 @@ class App extends React.Component {
     this.setState({
       folders: [...this.state.folders, folder]
     })
+    this.props.history.push('/')
   }
 
   handleAddNote = note => {
@@ -53,32 +54,14 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch(config.API_ENDPOINT_NOTES, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${config.API_TOKEN}`
-      }
-    })
-      .then(res => {
-        if (!res.ok) {
-          return res.json().then(error => Promise.reject(error))
+    const fetchFolders = 
+      fetch(`${config.API_ENDPOINT}/folders`, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${config.API_TOKEN}`
         }
-        return res.json()
       })
-      .then(this.setNotes)
-      .catch(error => {
-        console.error(error)
-        this.setState({ error })
-      })
-
-      fetch(config.API_ENDPOINT_FOLDERS, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${config.API_TOKEN}`
-      }
-    })
       .then(res => {
         if (!res.ok) {
           return res.json().then(error => Promise.reject(error))
@@ -90,6 +73,30 @@ class App extends React.Component {
         console.error(error)
         this.setState({ error })
       })
+    
+      const fetchNotes = 
+      fetch(`${config.API_ENDPOINT}/notes`, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${config.API_TOKEN}`
+        }
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(error => Promise.reject(error))
+        }
+        return res.json()
+      })
+      .then(this.setNotes)
+      .catch(error => {
+        console.error(error)
+        this.setState({ error })
+      }) 
+
+    Promise.all([fetchFolders, fetchNotes])
+      .catch(error => console.log(error.message))
+
   }
   
   
@@ -143,7 +150,6 @@ class App extends React.Component {
                     exact path='/' 
                     component={NoteList} 
                   />
-                  
                   <Route 
                     path='/folder/:folderId'
                     component={NoteList}

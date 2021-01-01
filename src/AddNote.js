@@ -57,7 +57,7 @@ class AddNote extends React.Component {
             }
         }
 
-        fetch(config.API_ENDPOINT_ADDNOTE, options)
+        fetch(`${config.API_ENDPOINT}/add-note`, options)
             .then(res => {
                 if (!res.ok)
                 return res.json().then(e => Promise.reject(e))
