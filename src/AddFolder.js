@@ -35,11 +35,11 @@ class AddFolder extends React.Component {
        
         const options = {
             method: 'POST',
-            body: JSON.stringify(folder),
             headers: {
                 'content-type': 'application/json',
                 'Authorization' : `Bearer ${config.API_TOKEN}`
-            }
+            },
+            body: JSON.stringify(folder)
         }
 
         fetch(`${config.API_ENDPOINT}/add-folder`, options)
@@ -48,9 +48,9 @@ class AddFolder extends React.Component {
                 return res.json().then(e => Promise.reject(e))
                 return res.json()
             })
-            .then( data => {
-                console.log(data)
-                this.context.addFolder(data)
+            .then( res => {
+                //console.log(data)
+                this.context.addFolder(res)
                 //this.props.history.push('/')
             })
             .catch(error => {
@@ -69,13 +69,13 @@ class AddFolder extends React.Component {
     
     render() {
         const nameError = this.validateTitle()
-        //console.log(this.context.addFolder)
+        //console.log(this.context.folders)
 
         return ( 
             <div>
                 <h2>Folder Form</h2>
                 <br />
-                <form onSubmit={(e)=> this.handleAddFolder(e)}>
+                <form onSubmit={this.handleAddFolder}>
                     <label htmlFor='title'>
                         Name
                     </label>

@@ -70,13 +70,13 @@ class App extends React.Component {
       }) 
 }
 
-handleDeleteNote = noteId => {
-  console.log('delete note on app.js')
-  const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
-  this.setState({
-    notes: filteredNotes
-  })
-}
+  handleDeleteNote = noteId => {
+    console.log('delete note on app.js')
+    const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
+    this.setState({
+      notes: filteredNotes
+    })
+  }
 
   handleAddFolder = folder => {
     console.log('add folder on App.js', folder)
