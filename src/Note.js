@@ -37,7 +37,7 @@ class Note extends React.Component {
     }
 
     handleDeleteButton = (e) => {
-        //e.preventDefault()
+        e.preventDefault()
         const noteId = this.props.id
 
         fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
@@ -45,17 +45,16 @@ class Note extends React.Component {
             headers: {
                 'content-type': 'application/json',
                 'Authorization': `Bearer ${config.API_TOKEN}`
-            },
+                },
             })
             .then(res => {
                 if (!res.ok) {
                     return res.json().then(e => Promise.reject(e))
                 }
-                return res.json()
+                return res.json()  
             })
-            .then(console.log(noteId))
             .then(this.context.deleteNote(noteId))
-            .then(this.props.onDeleteNote(noteId))
+            .then(this.props.onDeleteNote())
             .catch(error => {
                 console.error({ error })
             })

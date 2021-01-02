@@ -12,29 +12,29 @@ class NotePage extends React.Component {
 
     static contextType = NotefulContext;
 
-    handleDeleteNote = (noteId) => {
+    handleDeleteNote = () => {
         this.props.history.push(`/`)
       }
 
     render() {
 
-        const noteId = this.props.match.params.noteId
+        const { noteId } = this.props.match.params
         const findNote = this.context.notes.find( notes => notes.id === parseInt(noteId))
 
-        console.log("NotePage", noteId, findNote )
+        console.log("NotePage")
 
         return (
             <div className='notepage'>
                 <h2>
                     Note Page Component
                 </h2>
-                <Note
-                    id={findNote.id}
-                    name={findNote.note_name}
-                    modified={findNote.modified}
-                    content={findNote.content}
-                    onDeleteNote={this.handleDeleteNote}
-                />
+                    <Note
+                        id={findNote.id}
+                        name={findNote.note_name}
+                        modified={findNote.modified}
+                        content={findNote.content}
+                        onDeleteNote={this.handleDeleteNote}
+                    />
                 <p>{findNote.content}</p>
             </div>
         )
