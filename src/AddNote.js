@@ -65,7 +65,6 @@ class AddNote extends React.Component {
                 return res.json()
             })
             .then( data => {
-                console.log('add note .then', data)
                 this.context.addNote(data)
                 this.props.history.push('/')
             })

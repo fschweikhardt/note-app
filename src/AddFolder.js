@@ -49,9 +49,8 @@ class AddFolder extends React.Component {
                 return res.json()
             })
             .then( res => {
-                //console.log(data)
                 this.context.addFolder(res)
-                //this.props.history.push('/')
+                this.props.history.push('/')
             })
             .catch(error => {
                 console.error({ error })
@@ -69,7 +68,6 @@ class AddFolder extends React.Component {
     
     render() {
         const nameError = this.validateTitle()
-        //console.log(this.context.folders)
 
         return ( 
             <div>

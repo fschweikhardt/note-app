@@ -53,9 +53,9 @@ class Note extends React.Component {
                 }
                 return res.json()
             })
-            .then(this.props.onDeleteNote(noteId))
+            .then(console.log(noteId))
             .then(this.context.deleteNote(noteId))
-            
+            .then(this.props.onDeleteNote(noteId))
             .catch(error => {
                 console.error({ error })
             })

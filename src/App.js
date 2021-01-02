@@ -71,7 +71,7 @@ class App extends React.Component {
 }
 
   handleDeleteNote = noteId => {
-    console.log('delete note on app.js')
+    console.log('delete note on app.js', noteId)
     const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
     this.setState({
       notes: filteredNotes
@@ -92,8 +92,12 @@ class App extends React.Component {
     })
   }
 
-  handleEditNote = note => {
-    console.log('edit note on App.js', note)
+  handleEditNote = updatedNote => {
+    console.log('edit note on App.js', updatedNote)
+    let notesEdited = this.state.notes.filter( n => n.id !== updatedNote.id)
+    this.setState({
+      notes: [...notesEdited, updatedNote]
+    })
   }
 
   render() {

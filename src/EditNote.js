@@ -85,10 +85,13 @@ class EditNote extends React.Component {
                 }
                 return res.json()
             })
-            .then( data => {
-                this.context.editNote(data)
-                //this.props.history.push('/')
-            })
+            // .then( data => {
+            //     this.context.editNote(data)
+            //     console.log(data)
+            //     //this.props.history.push('/')
+            // })
+            .then(this.context.editNote(note))
+            .then(this.props.history.push('/'))
             .catch(error => {
                 console.error({ error })
             })
