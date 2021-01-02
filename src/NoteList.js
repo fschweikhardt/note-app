@@ -17,7 +17,7 @@ class NoteList extends React.Component {
         const getNotesForFolder = (notes=[], folderId) => (
             (!folderId)
               ? notes
-              : notes.filter(note => note.folderid == folderId)
+              : notes.filter(note => note.folderid === folderId)
         )
         
         const folderId = this.props.match.params.folderId
