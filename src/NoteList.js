@@ -48,6 +48,10 @@ class NoteList extends React.Component {
                         <Link to='/add-note'>
                             ADD NOTE
                         </Link>
+                        <br />
+                        {/* <Link to={`/edit/${this.props.match.params}`}>
+                            EDIT NOTE
+                        </Link> */}
                 </button>
             </div>
         )

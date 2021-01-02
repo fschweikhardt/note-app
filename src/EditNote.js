@@ -1,10 +1,10 @@
 import React from 'react'
 import NotefulContext from './NotefulContext'
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
 import ValidationError from './ValidationError'
 import config from './config'
 
-class AddNote extends React.Component {
+class EditNote extends React.Component {
     static contextType = NotefulContext;
     // constructor(props) {
     //     super(props)
@@ -16,14 +16,15 @@ class AddNote extends React.Component {
             content: {
                 value: '', 
                 touched: false
-            }
+            }, 
+            folderid: ''
         }
     //}
 
-    updateName(name) {
+    updateName(note_name) {
         this.setState({
             name: {
-                value: name, 
+                value: note_name, 
                 touched: true
             }
         })
@@ -38,26 +39,46 @@ class AddNote extends React.Component {
         })
     }
 
-    handleAddNote = (e) => {
+    componentDidMount() {
+        const { noteId } = this.props.match.params
+        //console.log(parseInt(noteId))
+        let note = this.context.notes.find(note => note.id === parseInt(noteId)) 
+        let name = note.note_name
+        let content = note.content
+        this.setState({
+            name: {
+                value: name
+            },
+            content: {
+                value: content
+            },
+            folderid: note.folderid
+        })
+
+     }
+
+    handleEditNote = (e) => {
         e.preventDefault()
+        const { noteId } = this.props.match.params
         
         const note = {
             note_name: this.state.name.value, 
             content: this.state.content.value,
-            modified: new Date(document.lastModified),
+            modified: new Date(),
             folderid: e.target['folderid'].value,
+            id: parseInt(noteId)
         }
        
         const options = {
-            method: 'POST',
-            body: JSON.stringify(note),
+            method: 'PATCH',
             headers: {
                 'content-type': 'application/json',
                 'Authorization': `Bearer ${config.API_TOKEN}`
-            }
+            },
+            body: JSON.stringify(note),
         }
 
-        fetch(`${config.API_ENDPOINT}/add-note`, options)
+        fetch(`${config.API_ENDPOINT}/notes/${noteId}`, options)
             .then(res => {
                 if (!res.ok) {
                     return res.json().then(e => Promise.reject(e))
@@ -65,9 +86,8 @@ class AddNote extends React.Component {
                 return res.json()
             })
             .then( data => {
-                console.log('add note .then', data)
-                this.context.addNote(data)
-                this.props.history.push('/')
+                this.context.editNote(data)
+                //this.props.history.push('/')
             })
             .catch(error => {
                 console.error({ error })
@@ -95,7 +115,6 @@ class AddNote extends React.Component {
     render() {
         const nameError = this.validateName()
         const contentError = this.validateContent()
-        //console.log(this.context.addNote)
 
         const newFolder = this.context.folders.map( (folder, idx) => {
             return (
@@ -109,7 +128,7 @@ class AddNote extends React.Component {
             <div>
                 <h2>Note Form</h2>
                 <br />
-                <form onSubmit={this.handleAddNote}>
+                <form onSubmit={this.handleEditNote}>
                     <label htmlFor='folderid'>
                         Choose an existing folder:
                     </label>
@@ -156,9 +175,9 @@ class AddNote extends React.Component {
     }
 }
 
-AddNote.propTypes = {
-    name: PropTypes.string,
-    content: PropTypes.string
-}
+// AddNote.propTypes = {
+//     name: PropTypes.string,
+//     content: PropTypes.string
+// }
 
-export default AddNote
+export default EditNote

@@ -11,6 +11,7 @@ import NoteList from './NoteList'
 import NotePage from './NotePage'
 import AddFolder from './AddFolder'
 import AddNote from './AddNote'
+import EditNote from './EditNote'
 import NotefulError from './NotefulError'
 
 class App extends React.Component {
@@ -69,13 +70,13 @@ class App extends React.Component {
       }) 
 }
 
-  handleDeleteNote = noteId => {
-    console.log('delete note on app.js')
-    const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
-    this.setState({
-      notes: filteredNotes
-    })
-  }
+handleDeleteNote = noteId => {
+  console.log('delete note on app.js')
+  const filteredNotes = this.state.notes.filter( notes => notes.id !== noteId)
+  this.setState({
+    notes: filteredNotes
+  })
+}
 
   handleAddFolder = folder => {
     console.log('add folder on App.js', folder)
@@ -91,13 +92,18 @@ class App extends React.Component {
     })
   }
 
+  handleEditNote = note => {
+    console.log('edit note on App.js', note)
+  }
+
   render() {
     const value = {
       folders: this.state.folders,
       notes: this.state.notes,
       deleteNote: this.handleDeleteNote, 
       addFolder: this.handleAddFolder,
-      addNote: this.handleAddNote
+      addNote: this.handleAddNote, 
+      editNote: this.handleEditNote
       }
 
     console.log('state: folders', this.state.folders)
@@ -127,7 +133,7 @@ class App extends React.Component {
                     component={NoteNav}
                   />
                   <Route
-                    path={['/add-folder', '/add-note']}
+                    path={['/add-folder', '/add-note', '/edit/:noteId']}
                     component={AddNav}
                   />
                 </NotefulError>
@@ -156,6 +162,10 @@ class App extends React.Component {
                   <Route 
                     path='/add-note'
                     component={AddNote}
+                  />
+                  <Route
+                    path='/edit/:noteId'
+                    component={EditNote}
                   />
                 </NotefulError>
               </Switch>
