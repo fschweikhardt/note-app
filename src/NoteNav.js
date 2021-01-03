@@ -34,10 +34,10 @@ class NoteNav extends React.Component {
 
 
         // const { noteId } = this.props.match.params
-        // const note = this.context.notes.find(note => note.id == parseInt(noteId))
+        // const note = this.context.notes.find(note => note.id === parseInt(noteId))
         // const noteFolder = note.folderid
         // console.log(noteFolder)
-        // const folderName = this.context.folders.find( folder => folder.id == noteFolder)
+        // const folderName = this.context.folders.find( folder => folder.id === parseInt(noteFolder))
         // console.log(folderName.title)
 
         return (
@@ -51,11 +51,16 @@ class NoteNav extends React.Component {
                 </button>
                 <br />
                 <br />
-                {/* <p>Your current folder is:</p>
-                <h3>
-                    {folderName.title}
-                </h3> */}
                 
+                {/* <p>Your current folder is:</p>
+                
+                {folderName &&
+                <>
+                    <h3>
+                        {folderName.title}
+                    </h3>
+                </>
+            } */}
             </div>
         )
     }
