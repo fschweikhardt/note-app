@@ -47,7 +47,8 @@ class NoteNav extends React.Component {
         const { noteId } = this.props.match.params
         const note = findNote(this.context.notes, noteId)
         console.log(note)
-        const folder = findFolder(this.context.folders, note.folderid)
+        //const folder = findFolder(this.context.folders, note.folderid)
+        const folder = note && findFolder(this.context.folders, note.folderid)
         console.log(folder)
 
         return (

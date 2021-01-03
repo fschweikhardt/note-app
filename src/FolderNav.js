@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import NotefulContext from './NotefulContext'
+import { countNotesForFolder } from './note-helpers'
 
 class FolderNav extends React.Component {
     static contextType = NotefulContext;
@@ -8,6 +9,8 @@ class FolderNav extends React.Component {
     render() {
         //const folders = this.context.folders
         //console.log(this.context.folders)
+        
+        // const noteNum = this.context.folders && countNotesForFolder(this.context.notes, folder.id)
     return (
         <div className='sidebar'>
             <h2>Folders</h2>
@@ -17,6 +20,9 @@ class FolderNav extends React.Component {
                         <li key={folder.id} >
                             <Link to={`/folder/${folder.id}`}>
                             {folder.title}
+                            <br />
+                            <p>Number of notes:</p>{countNotesForFolder(this.context.notes, folder.id)}
+                            <br />
                             </Link>
                         </li>
             )
