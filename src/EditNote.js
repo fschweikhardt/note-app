@@ -1,71 +1,87 @@
 import React from 'react'
 import NotefulContext from './NotefulContext'
 //import PropTypes from 'prop-types'
-import ValidationError from './ValidationError'
+//import ValidationError from './ValidationError'
 import config from './config'
 
 class EditNote extends React.Component {
     static contextType = NotefulContext;
-    // constructor(props) {
-    //     super(props)
-        state = {
-            name: {
-                value: '', 
-                touched: false
-            },
-            content: {
-                value: '', 
-                touched: false
-            }, 
-            folderid: ''
-        }
-    //}
-
-    updateName(note_name) {
-        this.setState({
-            name: {
-                value: note_name, 
-                touched: true
-            }
-        })
+        
+    state = {
+        note_name: '',
+        content: '',
+        folderid: ''
     }
 
-    updateContent(content) {
-        this.setState({
-            content: {
-                value: content, 
-                touched: true
-            }
-        })
-    }
-
-    componentDidMount() {
+    componentDidMount() { 
         const { noteId } = this.props.match.params
-        //console.log(parseInt(noteId))
-        let note = this.context.notes.find(note => note.id === parseInt(noteId)) 
-        let name = note.note_name
-        let content = note.content
-        this.setState({
-            name: {
-                value: name
+        const options = {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Bearer ${config.API_TOKEN}`
             },
-            content: {
-                value: content
-            },
-            folderid: note.folderid
-        })
+        }
+        fetch(`${config.API_ENDPOINT}/notes/${noteId}`, options)
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(e => Promise.reject(e))
+                }
+                return res.json()
+            })
+            .then(responseData => {
+                this.setState({
+                  note_name: responseData.note_name,
+                  content: responseData.content,
+                  folderid: responseData.folderid,
+                })
+              })
+            .catch(error => {
+                console.error(error)
+                this.setState({ error })
+            })
+    }
 
-     }
+
+    updateName = (event) => {
+        this.setState({
+            note_name: event.target.value
+        })
+    }
+
+    updateContent = (event) => {
+        this.setState({
+            content: event.target.value
+        })
+    }
+
+    // componentDidMount() {
+    //     const { noteId } = this.props.match.params
+    //     //console.log(parseInt(noteId))
+    //     let note = this.context.notes.find(note => note.id === parseInt(noteId)) 
+    //     let name = note.note_name
+    //     let content = note.content
+    //     this.setState({
+    //         name: {
+    //             value: name
+    //         },
+    //         content: {
+    //             value: content
+    //         },
+    //         folderid: note.folderid
+    //     })
+
+    //  }
 
     handleEditNote = (e) => {
         e.preventDefault()
         const { noteId } = this.props.match.params
         
         const note = {
-            note_name: this.state.name.value, 
-            content: this.state.content.value,
+            note_name: this.state.note_name, 
+            content: this.state.content,
             modified: new Date(),
-            folderid: e.target['folderid'].value,
+            folderid: this.state.folderid,
             id: parseInt(noteId)
         }
        
@@ -85,11 +101,6 @@ class EditNote extends React.Component {
                 }
                 return res.json()
             })
-            // .then( data => {
-            //     this.context.editNote(data)
-            //     console.log(data)
-            //     //this.props.history.push('/')
-            // })
             .then(this.context.editNote(note))
             .then(this.props.history.push('/'))
             .catch(error => {
@@ -97,42 +108,44 @@ class EditNote extends React.Component {
             })
     }
 
-    validateName() {
-        let name = this.state.name.value
-        if ( name.length === 0 ) {
-            return "Enter a name"
-        } else if ( name.length < 4 ) {
-            return "Enter a longer name"
-        }
-    }
+    // validateName() {
+    //     let name = this.state.name.value
+    //     if ( name.length === 0 ) {
+    //         return "Enter a name"
+    //     } else if ( name.length < 4 ) {
+    //         return "Enter a longer name"
+    //     }
+    // }
 
-    validateContent() {
-        let content = this.state.content.value
-        if ( content.length === 0 ) {
-            return "Enter content"
-        } else if ( content.length < 4 ) {
-            return "Enter more content"
-        }
-    }
+    // validateContent() {
+    //     let content = this.state.content.value
+    //     if ( content.length === 0 ) {
+    //         return "Enter content"
+    //     } else if ( content.length < 4 ) {
+    //         return "Enter more content"
+    //     }
+    // }
         
     render() {
-        const nameError = this.validateName()
-        const contentError = this.validateContent()
+        //const nameError = this.validateName()
+        //const contentError = this.validateContent()
 
-        const newFolder = this.context.folders.map( (folder, idx) => {
-            return (
-                <option value={folder.id} key={idx}>
-                    {folder.title}
-                </option>
-            )
-        })
-
+        // const newFolder = this.context.folders.map( (folder, idx) => {
+        //     return (
+        //         <option value={folder.id} key={idx}>
+        //             {folder.title}
+        //         </option>
+        //     )
+        // })
+        
+        const { note_name, content } = this.state
+        console.log(note_name)
         return ( 
             <div>
                 <h2>Note Form</h2>
                 <br />
                 <form onSubmit={this.handleEditNote}>
-                    <label htmlFor='folderid'>
+                    {/* <label htmlFor='folderid'>
                         Choose an existing folder:
                     </label>
                     <select 
@@ -140,19 +153,20 @@ class EditNote extends React.Component {
                         id='folderid'
                     >
                         {newFolder}
-                    </select>
+                    </select> */}
                     <br />
-                    <label htmlFor='name'>
+                    <label htmlFor='note_name'>
                         Name
                     </label>
                     <input 
                         type='text' 
-                        name='name' 
-                        id='name'
-                        onChange={(e)=>this.updateName(e.target.value)}
-                        required
+                        name='note_name' 
+                        id='note_name'
+                        value={note_name}
+                        placeholder={note_name}
+                        onChange={this.updateName}   
                     />
-                    {this.state.name.touched && <ValidationError message={nameError} />}
+                    {/* {this.state.name.touched && <ValidationError message={nameError} />} */}
                     <br />
                     <label htmlFor='content'>
                         Content
@@ -161,10 +175,11 @@ class EditNote extends React.Component {
                         type='text' 
                         name='content' 
                         id='content'
-                        onChange={(e)=>this.updateContent(e.target.value)}
-                        required
+                        value={content}
+                        placeholder={content}
+                        onChange={this.updateContent} 
                     />
-                    {this.state.name.touched && <ValidationError message={contentError} />}
+                    {/* {this.state.name.touched && <ValidationError message={contentError} />} */}
                     <br />
                     <button
                         type='submit'
