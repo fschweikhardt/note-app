@@ -6,8 +6,8 @@ function Header() {
     return (
         <div className='header'>
             <Link to='/'>
-                <h1>Noteful
-                    
+                <h1>
+                    Note App
                 </h1>
             </Link>
         </div>
