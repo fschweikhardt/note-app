@@ -61,7 +61,7 @@ class App extends React.Component {
         }  
         return Promise.all([foldersRes.json(), notesRes.json()]);
       })
-      .then(([folders, notes]) => {
+      .then( ([folders, notes]) => {
         this.setState({folders, notes});
     })
       .catch(error => {
