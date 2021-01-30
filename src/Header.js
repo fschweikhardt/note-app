@@ -7,7 +7,7 @@ function Header() {
         <div className='header'>
             <Link to='/'>
                 <h1>
-                    Note App
+                    Notez App
                 </h1>
             </Link>
         </div>
